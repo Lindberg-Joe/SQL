@@ -1,0 +1,44 @@
+1
+SELECT name,address,phone
+FROM TPCH.dbo.Supplier;
+
+2
+SELECT *
+FROM TPCH.dbo.Orders
+WHEREN CURRENT_TIMESTAMP - orderdate < 7 AND totalprice > 1000;
+
+3
+--ALTER TABLE TPCH.dbo.orders
+--ALTER COLUMN totalprice REAL;
+
+SELECT C.custkey,SUM(O.totalprice) price
+FROM TPCH.dbo.customer C,TPCH.dbo.orders O
+WHERE C.custkey=O.custkey
+GROUP BY C.custkey;
+
+4
+SELECT C.custkey,MAX(C.name) name
+FROM TPCH.dbo.customer C,TPCH.dbo.orders O
+WHERE C.custkey=O.custkey
+GROUP BY C.custkey
+HAVING AVG(O.totalprice) > 1000;
+
+5
+SELECT F.suppkey, F.name ,F.address
+FROM TPCH.dbo.supplier F ,TPCH.dbo.supplier S
+WHERE F.nationkey = S.nationkey AND S.name = '金仓集团'
+
+6
+SELECT P.name ,P.mfgr, P.retailprice, PS.supplycost
+FROM TPCH.dbo.part P ,TPCH.dbo.partsupp PS
+WHERE P.retailprice > PS.supplycost;
+
+7
+SELECT P.name ,P.mfgr, P.retailprice, PS.supplycost
+FROM TPCH.dbo.part P ,TPCH.dbo.partsupp PS
+WHERE P.partkey = PS.partkey AND P.retailprice > PS.supplycost;
+
+8
+SELECT O.orderkey, O.totalprice ,L.partkey ,L.quantity ,L.extendedprice
+FROM TPCH.dbo.customer C ,TPCH.dbo.orders O,TPCH.dbo.lineitem L
+WHERE C.custkey = O.custkey AND O.orderkey > L.orderkey AND C.name='苏举库';
