@@ -1,0 +1,55 @@
+1
+insert into tpch.dbo.Customer
+values(2110100,'张三','北京市',40,'010-51001190',0.00,'Northeast','VIP Customer');
+
+2
+insert into tpch.dbo.Lineitem(orderkey,linenumber,partkey,suppkey,quantity,shipdate)
+values(2110100,ROUND(0.234*100,0),479,1,10,'2012-3-6');
+
+3
+1
+select * into NewCustomer from tpch.dbo.Customer;
+insert into NewCustomer
+select c.*
+from tpch.dbo.Customer c,tpch.dbo.Nation n
+where c.nationkey=n.nationkey and n.name='中国';
+
+3
+2
+create table ShoppingStat
+(custkey integer,
+quantity real,
+totalprice real);
+insert into ShoppingStat
+select c.custkey,Sum(l.quantity),Sum(o.totalprice)
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l
+where c.custkey=o.custkey and o.orderkey=l.orderkey
+group by c.custkey;
+3
+3
+insert into tpch.dbo.Part
+select partkey+100*(select count(*) from tpch.dbo.Part),
+	name,mfgr,brand,type,size,container,retailprice,comment
+from tpch.dbo.Part;
+
+4
+update tpch.dbo.PartSupp
+set supplycost=supplycost*0.9
+where suppkey=(select suppkey
+				from tpch.dbo.Supplier
+				where name='上海圆月广告有限公司');
+5
+update tpch.dbo.Lineitem
+set extendedprice=P.retailprice*quantity
+from tpch.dbo.Part P
+where Lineitem.partkey=P.partkey;
+
+6
+delete from tpch.dbo.Lineitem
+where orderkey in (select orderkey
+					from tpch.dbo.Orders O,tpch.dbo.Customer C
+					where O.custkey=C.custkey and C.name='阿九');
+delete from tpch.dbo.Orders
+where custkey = (select custkey
+					from tpch.dbo.Customer
+					where name='阿九');
