@@ -1,0 +1,61 @@
+1
+create view v_dlmu_partsupp1 as
+select p.partkey,p.name,ps.availqty,p.retailprice,ps.supplycost,p.comment
+from tpch.dbo.Part p,tpch.dbo.PartSupp ps,tpch.dbo.Supplier s；
+
+select*
+from v_dlmu_partsupp1;
+
+2
+create view v_custAvgOrder(custkey,cname,avgprice,avgquantity) as
+select c.custkey,MAX(c.name),avg(o.totalprice),avg(l.quantity)
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l
+where c.custkey=o.custkey and l.orderkey=o.orderkey
+group by c.custkey
+
+select*
+from v_custAvgOrder;
+
+3
+create view v_dlmu_partSupp2
+as
+select partkey,suppkey,availqty,supplycost
+from tpch.dbo.PartSupp
+where suppkey=(select suppkey
+				from tpch.dbo.Supplier
+				where name='上海圆月广告有限公司')
+with check option;
+
+select*
+from v_dlmu_partSupp3;
+
+insert into v_dlmu_partSupp3
+values(58889,5048,704,77760);
+
+update v_dlmu_partSupp3
+set supplycost = 12
+where suppkey=58889;
+
+delete from v_dlmu_partSupp3
+where suppkey=58889;
+
+4
+
+5
+
+6
+create view v_custOrd(custkey,cname,qty,extprice)
+as
+select c.custkey,c.name,l.quantity,l.extendedprice
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l
+where c.custkey=o.custkey and o.orderkey=l.orderkey;
+
+create view v_custAvgOrder2(custkey,cname,avgqty,avgprice)
+as
+select custkey,MAX(cname),AVG(qty),AVG(extprice)
+from v_custOrd
+group by custkey;
+
+drop view v_custOrd restrict;
+
+drop view v_custOrd cascade;
