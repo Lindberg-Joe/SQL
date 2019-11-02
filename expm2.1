@@ -81,6 +81,13 @@ grant PurchaseManagerRole to david with grant option;
 grant SaleManagerRole to Tom with grant option;
 grant CustomerManagerRole to Kathy with grant option;
 
-grant PurchaseEmployeeRole to Jeffery with grant option;
-grant SaleEmployeeRole to Jane with grant option;
-grant CustomerEmployeeRole to Mike with grant option;
+grant PurchaseEmployeeRole to Jeffery;
+grant SaleEmployeeRole to Jane;
+grant CustomerEmployeeRole to Mike;
+
+revoke SaleQueryRole from CustomerManagerRole;
+
+revoke CustomerManagerRole from Mike;
+
+select* from Part;
+delete from Orders;
