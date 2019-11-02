@@ -1,0 +1,86 @@
+1
+CREATE LOGIN test_Master
+WITH PASSWORD='123abc';
+
+CREATE LOGIN David
+WITH PASSWORD='123abc';
+create user David ;
+
+CREATE LOGIN Tom
+WITH PASSWORD='123abc';
+create user Tom ;
+
+CREATE LOGIN Kathy
+WITH PASSWORD='123abc';
+create user Kathy ;
+
+2
+CREATE LOGIN Jeffery
+WITH PASSWORD='123abc';
+create user Jeffery;
+
+CREATE LOGIN Jane
+WITH PASSWORD='123abc';
+create user Jane;
+
+CREATE LOGIN Mike
+WITH PASSWORD='123abc';
+create user Mike;
+
+3
+CREATE role PurchaseQueryRole;
+grant  select on Part to PurchaseQueryRole;
+grant  select on Supplier to PurchaseQueryRole;
+grant  select on PartSupp to PurchaseQueryRole;
+
+CREATE role SaleQueryRole;
+grant  select on Orders to SaleQueryRole;
+grant  select on LineItem to SaleQueryRole;
+
+CREATE role CustomerQueryRole;
+grant  select on Nation to CustomerQueryRole;
+grant  select on Region to CustomerQueryRole;
+
+CREATE role PurchaseEmployeeRole;
+grant  select,insert on Part to PurchaseEmployeeRole;
+grant  select,insert on Supplier to PurchaseEmployeeRole;
+grant  select,insert on PartSupp to PurchaseEmployeeRole;
+
+CREATE role SaleEmployeeRole;
+grant  select,insert on Orders to SaleEmployeeRole;
+grant  select,insert on LineItem to SaleEmployeeRole;
+
+CREATE role CustomerEmployeeRole;
+grant  select,insert on Customer to CustomerEmployeeRole;
+grant  select,insert on Nation to CustomerEmployeeRole;
+grant  select,insert on Region to CustomerEmployeeRole;
+
+4
+CREATE role PurchaseManagerRole;
+grant  all on Part to PurchaseManagerRole;
+grant  all on Supplier to PurchaseManagerRole;
+grant  all on PartSupp to PurchaseManagerRole;
+--grant SaleQuery to PurchaseManagerRole;
+--grant CustomerQueryRole to PurchaseManagerRole;
+
+CREATE role SaleManagerRole;
+grant  all on Orders to SaleManagerRole;
+grant  all on LineItem to SaleManagerRole;
+--grant PurchaseQuery to SaleManagerRole;
+--grant CustomerQueryRole to SaleManagerRole;
+
+CREATE role CustomerManagerRole;
+grant  all on Customer to CustomerManagerRole;
+grant  all on Nation to CustomerManagerRole;
+grant  all on Region to CustomerManagerRole;
+--grant PurchaseQueryRole to CustomerManagerRole;
+--grant SaleQueryRole to CustomerManagerRole;
+
+5
+grant PurchaseManagerRole to david with grant option;
+grant SaleManagerRole to Tom with grant option;
+grant CustomerManagerRole to Kathy with grant option;
+
+grant PurchaseEmployeeRole to Jeffery with grant option;
+grant SaleEmployeeRole to Jane with grant option;
+grant CustomerEmployeeRole to Mike with grant option;
