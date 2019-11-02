@@ -1,0 +1,85 @@
+1
+
+SELECT custkey,name
+FROM tpch.dbo.Customer
+WHERE custkey IN (SELECT O.custkey
+				  FROM tpch.dbo.Orders O,tpch.dbo.Lineitem L,tpch.dbo.PartSupp PS,tpch.dbo.Part P
+				  WHERE O.orderkey=L.orderkey AND
+						L.partkey=PS.partkey AND
+						L.suppkey=PS.suppkey AND
+						PS.partkey=P.partkey AND
+						P.mfgr='江西赣州阀门厂' AND P.name='竹炭净化包');
+
+2
+SELECT custkey,name
+FROM tpch.dbo.Customer C
+WHERE NOT EXISTS(SELECT O.custkey
+				  FROM tpch.dbo.Orders O,tpch.dbo.Lineitem L,tpch.dbo.PartSupp PS,tpch.dbo.Part P
+				  WHERE C.custkey=O.custkey AND
+						O.orderkey=L.orderkey AND
+						L.partkey=PS.partkey AND
+						L.suppkey=PS.suppkey AND
+						PS.partkey=P.partkey AND
+						P.mfgr='江西赣州阀门厂' AND P.name='竹炭净化包');
+
+3
+select CA.name
+from tpch.dbo.Customer CA
+where not exists
+	(select*
+	from tpch.dbo.Customer CB,tpch.dbo.Orders OB,tpch.dbo.LIneitem LB
+	where CB.custkey=OB.custkey AND
+		  OB.orderkey=LB.orderkey AND
+		  CB.name='阿宝宝' AND
+		  not exists(select*
+					 from tpch.dbo.Orders OC,tpch.dbo.Lineitem LC
+					 where CA.custkey=OC.custkey and
+					 LB.suppkey=LC.suppkey and
+					 LB.partkey=LC.partkey));
+
+4
+select c.*
+from tpch.dbo.Customer C,(select custkey
+						  from tpch.dbo.Orders
+						  group by custkey
+						  having avg(totalprice)>1000) B,tpch.dbo.Nation N
+where C.custkey=B.custkey and C.nationkey=N.nationkey and N.name='中国';
+
+5
+(select P.*
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l,tpch.dbo.PartSupp ps,tpch.dbo.Part  p
+where c.custkey=o.custkey and o.orderkey=l.orderkey  and
+	  l.suppkey=ps.suppkey and l.partkey=ps.partkey and
+	  ps.partkey=p.partkey and c.name='阿波罗'
+intersect
+select P.*
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l,tpch.dbo.PartSupp ps,tpch.dbo.Part  p
+where c.custkey=o.custkey and o.orderkey=l.orderkey  and
+	  l.suppkey=ps.suppkey and l.partkey=ps.partkey and
+	  ps.partkey=p.partkey and c.name='阿达')
+
+6
+(select P.*
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l,tpch.dbo.PartSupp ps,tpch.dbo.Part  p
+where c.custkey=o.custkey and o.orderkey=l.orderkey  and
+	  l.suppkey=ps.suppkey and l.partkey=ps.partkey and
+	  ps.partkey=p.partkey and c.name='阿波罗'
+union
+select P.*
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l,tpch.dbo.PartSupp ps,tpch.dbo.Part  p
+where c.custkey=o.custkey and o.orderkey=l.orderkey  and
+	  l.suppkey=ps.suppkey and l.partkey=ps.partkey and
+	  ps.partkey=p.partkey and c.name='刘上志')
+
+7
+(select P.*
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l,tpch.dbo.PartSupp ps,tpch.dbo.Part  p
+where c.custkey=o.custkey and o.orderkey=l.orderkey  and
+	  l.suppkey=ps.suppkey and l.partkey=ps.partkey and
+	  ps.partkey=p.partkey and c.name='阿波罗'
+except
+select P.*
+from tpch.dbo.Customer c,tpch.dbo.Orders o,tpch.dbo.Lineitem l,tpch.dbo.PartSupp ps,tpch.dbo.Part  p
+where c.custkey=o.custkey and o.orderkey=l.orderkey  and
+	  l.suppkey=ps.suppkey and l.partkey=ps.partkey and
+	  ps.partkey=p.partkey and c.name='刘上志')
