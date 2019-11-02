@@ -1,0 +1,53 @@
+1
+create unique index Idx_part_name on Part (name);
+
+2
+alter table Part
+add leng integer;
+
+update table Part
+set leng=len(name);
+
+create index Idx_part_name_fun on Part (leng);
+
+3
+create unique index Idx_part_mfgr_brand on Part (mfgr,brand);
+
+4
+create unique index Idx_part_mfgr on Part (mfgr);
+cluster Idx_part_mfgr on Part;
+
+CREATE UNIQUE CLUSTERED INDEX idx_Part_mfgr ON Part(mfgr);
+5
+create index Idx_part_name_hash on Part(name) using HASH;
+
+ALTER TABLE Part ADD name_hash AS CHECKSUM([name]) PERSISTED
+CREATE INDEX IX_Part_name_hash ON Part ([name_hash])
+6
+alter index Idx_part_name_fun rename to Idx_part_name_fun1;
+exec sp_rename 'Part.Idx_part_name_fun','Idx_part_name_fun2';
+
+7
+explain select* from Part where name='零件';
+
+SET STATISTICS PROFILE ON   
+SELECT * FROM Part AS p
+
+8
+create function TestIndex (@pname char(55))
+returns integer
+as
+begin
+declare  
+	@begintime TIMESTAMP
+declare  
+	@endtime TIMESTAMP;
+declare  
+	@durationtime integer;
+begin
+	select @begintime=current_timestamp;
+	select* from Part where name= @pname;
+	select @endtime=current_timestamp;
+	select @durationtime=DATEDIFF(ms,@begintime,@endtime);
+	return @durationtime;
+end;
