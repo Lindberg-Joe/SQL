@@ -1,0 +1,66 @@
+1
+create table supplier1(
+	suppkey integer constraint PK_supplier primary key,
+	name char(25),
+	address varchar(40),
+	nationalkey integer,
+	phone char(15),
+	acctbal real,
+	comment varchar(101)
+	);
+
+2
+create table supplier1(
+	suppkey integer,
+	name char(25),
+	address varchar(40),
+	nationalkey integer,
+	phone char(15),
+	acctbal real,
+	comment varchar(101)
+	constraint PK_supplier primary key(suppkey)
+	);
+
+
+3
+create table supplier1(
+	suppkey integer,
+	name char(25),
+	address varchar(40),
+	nationalkey integer,
+	phone char(15),
+	acctbal real,
+	comment varchar(101)
+	);
+
+alter table supplier1
+add constraint PK_supplier primary key(suppkey);
+
+4
+create table partsupp1(
+	partkey integer,
+	suppkey integer,
+	availqty integer,
+	supplycost real,
+	comment varchar(199),
+	primary key(partkey,suppkey)
+	);
+
+5
+create table nation1(
+	nationkey integer constraint PK_nation primary key,
+	name char(25) unique,
+	regionkey integer,
+	comment varchar(152)
+	);
+
+6 
+alter table nation1 drop constraint PK_nation;
+
+7
+insert 
+into supplier1(suppkey,name,address,nationalkey,phone,acctbal,comment)
+values(11,'test1','test1',101,'12345678',0.0,'test1');
+insert 
+into supplier1(suppkey,name,address,nationalkey,phone,acctbal,comment)
+values(11,'test2','test2',102,'23456789',0.0,'test2');
