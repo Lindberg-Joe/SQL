@@ -1,0 +1,75 @@
+1
+create table region1(
+	regionkey integer primary key,
+	name char(25),
+	comment varchar(152)
+	);
+create table nation1(
+	nationkey integer primary key,
+	name char(25),
+	regionkey integer references region1(regionkey),
+	comment varchar(152)
+	);
+
+2
+create table nation1(
+	nationkey integer primary key,
+	name char(25),
+	regionkey integer references region1(regionkey),
+	comment varchar(152)
+	);
+alter table nation1
+add constraint FK_nation_regionkey
+foreign key(regionkey) references region1(regionkey);
+
+3
+CREATE TABLE PartSupp1 (
+	partkey INTEGER,
+	suppkey INTEGER,
+	availqty INTEGER,
+	supplycost REAL,
+	commment VARCHAR(199),
+	PRIMARY KEY (partkey,suppkey)
+);
+CREATE TABLE Lineitem1(
+	orderkey INTEGER REFERENCES Orders(prderkey),
+	partkey	INTEGER REFERENCES Part(partkey),
+	suppkey	INTEGER REFERENCES Supplier(suppkey),
+	linenumber	INTEGER,
+	quantity	REAL,
+	extendedprice	REAL,
+	discount	REAL,
+	tax	REAL,
+	returnflag	CHAR(1),
+	linestatus	CHAR(1)
+	shipdate	DATE,
+	commitdate	DATE,
+	receiptdate	DATE,
+	shipinstruct	CHAR(25),
+	shipmode	CHAR(10),
+	comment VARCHAR(44),
+	PRIMARY KEY(orderkey,linenumber),
+	FOREIGN KEY(partkey,suppkey) REFERENCES PartSupp(partkey,suppkey)
+	);
+
+4
+create table nation1(
+	nationkey integer primary key,
+	name char(25),
+	regionkey integer,
+	comment varchar(152)
+	constraint FK_nation_regionkey
+	foreign key(regionkey) references region1(regionkey);
+	on delete set null on update set null);
+	);
+
+5
+alter table nation drop constraint FK_nation_regionkey;
+
+6
+alter table nation1
+add constraint FK_nation_regionkey
+foreign key(regionkey) references region1(regionkey);
+
+insert into nation1(nationkey,name,regionkey,comment)
+values(1001,'nation1','1001','comment1');
