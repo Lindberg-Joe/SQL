@@ -1,0 +1,43 @@
+create table region1(
+	regionkey integer not null primary key,
+	name char(25) not null,
+	comment varchar(152) null);
+
+create table nation1(
+		nationkey integer primary key,
+		name char(25),
+		regionkey integer default 0,
+		comment varchar(152),
+		comstraint FK_nation_regionkey foreign key(regionkey) references region(refionkey)));
+
+create table nation1(
+		nationkey integer primary key,
+		name char(25) unique,
+		regionkey integer ,
+		comment varchar(152));
+
+CREATE TABLE Lineitem1(
+	orderkey INTEGER REFERENCES Orders(orderkey),
+	partkey	INTEGER REFERENCES Part(partkey),
+	suppkey	INTEGER REFERENCES Supplier(suppkey),
+	linenumber	INTEGER,
+	quantity	REAL,
+	extendedprice	REAL,
+	discount	REAL,
+	tax	REAL,
+	returnflag	CHAR(1),
+	linestatus	CHAR(1)
+	shipdate	DATE,
+	commitdate	DATE,
+	receiptdate	DATE,
+	shipinstruct	CHAR(25),
+	shipmode	CHAR(10),
+	comment VARCHAR(44),
+	PRIMARY KEY(orderkey,linenumber),
+	FOREIGN KEY(partkey,suppkey) REFERENCES PartSupp(partkey,suppkey),
+	check(shipdate<receiptdate),
+	check(returnflag in('a','r','n'))
+	);
+
+update Lineitem1 set shipdate='2015-01-05',receiptdate='2015-01-01'
+where orderkey=5005 and linenumber=1;
