@@ -1,0 +1,137 @@
+create table collage(
+	Cid char(6) primary key,
+	Cname varchar(20) not null,
+	);
+create table student(
+	Sid char(6) primary key,
+	Sname varchar(20) not null,
+	Sclass varchar(20) not null,
+	Sgrade varchar(20) not null,
+	Scollage char(6) foreign key references collage(Cid)
+	);
+create table project(
+	Pid char(6) primary key,
+	Padm char(6) foreign key references student(Sid),
+	Pname varchar(20) not null,
+	Pgarde varchar(20) not null,
+	Pclass varchar(20) not null,
+	Ptime date not null,
+	Pfin char(1) not null,
+	Pftime date,
+	Pfunds varchar(20) not null,
+	check (Pfin in ('0','A','B'))
+	);
+create table teacher(
+	Tid char(6) primary key,
+	Tname varchar(20) not null,
+	Tpro char(6) foreign key references project(Pid)
+	);
+create table paper(
+	Paid char(6) primary key,
+	Papid char(6) foreign key references project(Pid),
+	Pawriter char(6) foreign key references student(Sid),
+	Paname varchar(20) not null,
+	Padate date not null,
+	Panum varchar(20) not null
+	);
+create table software(
+	Wid char(6) primary key,
+	Wpid char(6) foreign key references project(Pid),
+	Winventor char(6) foreign key references student(Sid),
+	Wname varchar(20) not null,
+	);
+create table sp(
+	SPpid char(6) foreign key references project(Pid),
+	SPsid char(6) foreign key references student(Sid),
+	SPprize varchar(20) not null,
+	primary key (SPpid,SPsid)
+	);
+
+
+insert into collage
+values('000111','计算机学院');
+insert into collage
+values('000112','信息技术学院');
+insert into collage
+values('000113','建筑学院');
+
+insert into student
+values('000001','李明','物联网161','大四','000111');
+insert into student
+values('000002','张华','计算机科学161','大四','000111');
+insert into student
+values('000003','韩梅梅','网络162','大四','000111');
+insert into student
+values('000004','李雷','人工智能171','大三','000111');
+insert into student
+values('000005','乔子暄','物联网171','大三','000111');
+insert into student
+values('000006','苏轼','网络181','大二','000111');
+insert into student
+values('000010','张丽','信息181','大二','000112');
+insert into student
+values('000011','李伟','通信181','大二','000112');
+insert into student
+values('000021','王文','建工171','大三','000113');
+insert into student
+values('000023','苏辙','建艺181','大二','000113');
+
+insert into project
+values('000002','000002','学校生活管理系统','国家级','A类','2017-4-15','B','2017-11-10','12000');
+insert into project
+values('000003','000003','2D涂鸦手机APP','省级','B类','2017-5-20','B','2018-2-10','5000');
+insert into project
+values('000004','000004','违章检测软件','校级','B类','2017-10-12','B','2018-12-10','10000');
+insert into project
+values('000005','000005','VR互动游戏','国家级','A类','2018-1-12','B','2018-12-10','10000');
+insert into project
+values('000008','000011','信息综合交互系统','国家级','C类','2019-4-15','0',NULL,'12000');
+insert into project
+values('000009','000021','新校区食堂设计','校级','C类','2018-4-15','A','2018-10-15','1000');
+insert into project
+values('000007','000010','漫动相机的开发','国家级','C类','2019-5-15','0',NULL,'10000');
+insert into project
+values('000008','000011','信息综合交互系统','国家级','C类','2019-4-15','0',NULL,'12000');
+insert into project
+values('000009','000021','新校区食堂设计','校级','C类','2018-4-15','A','2018-10-15','1000');
+insert into project
+values('000010','000023','教学楼翻新方案','校级','C类','2019-4-15','0',NULL,'2000');
+
+insert into software
+values('200001','000001','000002','3D试衣系统');
+insert into software
+values('200002','000003','000003','2D涂鸦手机APP');
+insert into software
+values('200003','000004','000004','违章检测软件');
+insert into software
+values('200004','000005','000005','VR互动游戏');
+
+insert into paper
+values('100001','000002','000002','计算机工程与科学','2017-10-1','(11):3-6');
+insert into paper
+values('100002','000009','000021','建筑知识','2018-9-10','(10):3-2');
+
+insert into teacher
+values('900001','彭万里','000001');
+insert into teacher
+values('900002','邹诗雨','000002');
+insert into teacher
+values('900003','徐牧','000003');
+insert into teacher
+values('900004','马宏宇','000004');
+insert into teacher
+values('900005','林君雄','000005');
+insert into teacher
+values('900006','杨朝来','000006');
+insert into teacher
+values('900007','李俊','000007');
+insert into teacher
+values('900008','杨波','000008');
+insert into teacher
+values('900009','贾天华','000009');
+insert into teacher
+values('900010','曾维干','000010');
+insert into teacher
+values('900011','陈晟','000001');
+insert into teacher
+values('900012','段湘林','000006');
