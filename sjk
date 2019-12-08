@@ -56,25 +56,25 @@ insert into collage
 values('000113','建筑学院');
 
 insert into student
-values('000001','李明','物联网161','大四','000111');
+values('000001','刘旗辉','物联网161','大四','000111');
 insert into student
 values('000002','张华','计算机科学161','大四','000111');
 insert into student
-values('000003','韩梅梅','网络162','大四','000111');
+values('000003','陈达夫','网络162','大四','000111');
 insert into student
-values('000004','李雷','人工智能171','大三','000111');
+values('000004','于国宾','人工智能171','大三','000111');
 insert into student
 values('000005','乔子暄','物联网171','大三','000111');
 insert into student
-values('000006','苏轼','网络181','大二','000111');
+values('000006','唐志海','网络181','大二','000111');
 insert into student
-values('000010','张丽','信息181','大二','000112');
+values('000010','唐瑜','信息181','大二','000112');
 insert into student
-values('000011','李伟','通信181','大二','000112');
+values('000011','孙荣廷','通信181','大二','000112');
 insert into student
 values('000021','王文','建工171','大三','000113');
 insert into student
-values('000023','苏辙','建艺181','大二','000113');
+values('000023','孙思达','建艺181','大二','000113');
 
 insert into project
 values('000002','000002','学校生活管理系统','国家级','A类','2017-4-15','B','2017-11-10','12000');
@@ -135,3 +135,13 @@ insert into teacher
 values('900011','陈晟','000001');
 insert into teacher
 values('900012','段湘林','000006');
+insert into student
+values('000007','潘石屹','网络162','大四','000111');
+insert into student
+values('000008','蒋锡培','计算机科学161','大四','000111');
+insert into student
+values('000012','向文波','信息181','大二','000112');
+insert into student
+values('000013','于清','通信181','大二','000112');
+insert into student
+values('000024','叶茂中','建艺181','大二','000113');
