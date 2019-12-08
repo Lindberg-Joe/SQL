@@ -145,3 +145,35 @@ insert into student
 values('000013','于清','通信181','大二','000112');
 insert into student
 values('000024','叶茂中','建艺181','大二','000113');
+
+insert into sp
+values('000001','000001','一等奖');
+insert into sp
+values('000002','000002','一等奖');
+insert into sp
+values('000003','000003','二等奖');
+insert into sp
+values('000004','000004','三等奖');
+insert into sp
+values('000005','000005','二等奖');
+insert into sp
+values('000006','000006','一等奖');
+insert into sp
+values('000007','000010','一等奖');
+insert into sp
+values('000008','000011','二等奖');
+insert into sp
+values('000009','000021','三等奖');
+insert into sp
+values('000010','000023','二等奖');
+insert into sp
+values('000001','000006','一等奖');
+insert into sp
+values('000001','000002','一等奖');
+insert into sp
+values('000008','000012','无');
+insert into sp
+values('000009','000024','三等奖');
+insert into sp
+values('000007','000008','无');
+
