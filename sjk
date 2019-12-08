@@ -177,3 +177,30 @@ values('000009','000024','三等奖');
 insert into sp
 values('000007','000008','无');
 
+create unique index Idx_student_name on student(Sname);
+
+create index Idx_project_id on project (Pid);
+
+create view v_project_stu(Pid,Pname,Sid,Sname) as
+select Pid,Pname,Padm,Sname
+from project,student
+where Padm=Sid;
+
+create view v_project_tea(num,Pname) as
+select count(*),Pname
+from project,teacher
+where Tpro=Pid;
+
+delete from teacher
+where Tid='900006'
+
+delete from student
+where Scollage='000114';
+
+update student
+set Scollage='000114'
+where Sid='000090';
+
+update collage
+set Cname='外国语学院'
+where Cid='100060';
