@@ -204,3 +204,33 @@ where Sid='000090';
 update collage
 set Cname='外国语学院'
 where Cid='100060';
+
+create login 李明
+with password='123abc';
+create user 李明;
+grant  select,insert on student to 李明;
+
+create login 明华
+with password='123abc';
+create user 明华;
+grant  all teacher to 明华;
+
+select Pid,count(*) num
+from teacher,project
+where teacher.Tpro=project.Pid
+group by project.Pid;
+
+select Cid,count(*) num
+from collage,project,student
+where project.Padm=student.Sid and student.Scollage=collage.Cid
+group by collage.Cid
+having count(*)>5;
+
+select Pid,Pname,Ptime
+from project
+order by Ptime DESC;
+
+select Pid,Pname,Pftime
+from project
+where Pftime is not NULL
+order by Pftime DESC;
