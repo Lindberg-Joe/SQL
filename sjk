@@ -234,3 +234,42 @@ select Pid,Pname,Pftime
 from project
 where Pftime is not NULL
 order by Pftime DESC;
+
+create proc proc_for_collage @begin int,@end int,@name varchar(20)
+as
+begin
+select Cname,Pid,Pname,Sid,Sname,Ptime,Pftime,Pfin,SPprize
+from student,collage,project,sp
+where student.Sid=sp.SPsid and student.Scollage=collage.Cid and sp.SPpid=project.Pid
+	and collage.Cname=@name and year(Ptime)>=@begin and year(Ptime)<=@end;
+select Pid,count(*) 人数
+from student,collage,project,sp
+where student.Sid=sp.SPsid and student.Scollage=collage.Cid and sp.SPpid=project.Pid
+	and collage.Cname=@name and year(Ptime)>=@begin and year(Ptime)<=@end
+group by Pid;
+select Cid 学院编号,count(*) 学院总人次
+from student,collage,project,sp
+where student.Sid=sp.SPsid and student.Scollage=collage.Cid and sp.SPpid=project.Pid
+	and collage.Cname=@name and year(Ptime)>=@begin and year(Ptime)<=@end
+group by Cid;
+select Pfin 结项方式,count(*) 人次
+from student,collage,project,sp
+where student.Sid=sp.SPsid and student.Scollage=collage.Cid and sp.SPpid=project.Pid
+	and collage.Cname=@name and year(Ptime)>=@begin and year(Ptime)<=@end
+group by Pfin;
+end
+EXEC proc_for_collage 2016,2020,计算机学院
+
+create proc proc_for_grade @begin int,@end int,@grade varchar(20)
+as
+begin
+select Sgrade,Sid,Sname,Pid,Pname,Ptime,Pftime,Pfin,SPprize
+from student,project,sp
+where student.Sid=sp.SPsid and sp.SPpid=project.Pid
+	and Sgrade=@grade and year(Ptime)>=@begin and year(Ptime)<=@end;
+select Sgrade,count(*) 人次
+from student,project,sp
+where student.Sid=sp.SPsid and sp.SPpid=project.Pid
+	and Sgrade=@grade and year(Ptime)>=@begin and year(Ptime)<=@end
+group by Sgrade;
+end
