@@ -1,0 +1,82 @@
+1
+create proc Proc_CalTotalPrice
+as
+begin
+	update Orders set totalprice=
+		(select SUM(extendedprice*(1-discount)*(1-tax))
+		from Lineitem
+		where orders.orderkey=Lineitem.orderkey);
+end;
+exec Proc_CalTotalPrice
+
+2
+create proc Proc_CalTotalPrice4order(@okey int)
+as
+begin
+	update Orders set totalprice=
+		(select SUM(extendedprice*(1-discount)*(1-tax))
+		from Lineitem
+		where orders.orderkey=Lineitem.orderkey and Lineitem.orderkey=@okey);
+end;
+exec Proc_CalTotalPrice4order 1
+
+3
+create proc Proc_CalTotalPrice4customer(@p_custname char(25))
+as
+begin
+	declare @L_custkey int
+	select @L_custkey=custkey
+	from customer where name=rtrim(@p_custname);
+	update orders
+	set totalprice=
+	(
+	select SUM(extendedprice*(1-discount)*(1+tax))
+	from lineitem
+	where orders.orderkey=lineitem.orderkey and
+	orders.orderkey=@L_custkey
+	)
+	where custkey=@L_custkey;
+end;
+
+exec Proc_CalTotalPrice4customer '阿波罗'
+
+select *
+from Orders
+where custkey =(select custkey from Customer where name='阿波罗'); 
+
+4
+create proc Proc_CalTotalPrice4customer2(@p_custname char(25), @totalprice real output)
+as
+declare @L_custkey INT;
+begin
+	select @L_custkey=custkey
+	from customer
+	where name=rtrim(@p_custname);
+	print'custkey is ';
+	print @L_custkey
+
+	update orders
+	set totalprice=
+	(select SUM(extendedprice*(1-discount)*(1+tax))
+	from lineitem
+	where orders.orderkey=lineitem.orderkey and orders.custkey=@L_custkey
+	)
+	where custkey=@L_custkey;
+	select
+	@totalprice=SUM(totalprice)
+	from orders where custkey=@L_custkey;
+end;
+
+exec Proc_CalTotalPrice4customer2 '阿波罗', null
+
+select sum(totalprice)
+from orders
+where custkey=
+	(select custkey
+	from customer
+	where name='阿波罗');
+5
+exec sp_rename 'Proc_CalTotalPrice4order','CalTotalPrice4order';
+
+6
+drop proc Proc_CalTotalPrice4customer;
