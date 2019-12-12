@@ -1,0 +1,18 @@
+USE master
+exec sp_addumpdevice 'disk','NetSale_Bak_dev1','D:\NetSales_bak_Dev.bak'
+USE master
+exec sp_dropdevice 'NetSale_Bak_dev1',delfile
+USE master
+exec sp_addumpdevice 'disk','NetSale_Bak_dev1','D:\NetSales_bak_Dev.bak'
+
+BACKUP DATABASE test1 TO NetSale_Bak_dev1
+WITH DIFFERENTIAL,NAME='test1 差异式备份', DESCRIPTION='test1 差异式备份' ,EXPIREDATE='2019-12-30'
+
+BACKUP LOG test1 TO NetSale_Bak_dev1
+WITH NAME='test1 差异式备份', DESCRIPTION='test1 差异式备份' ,EXPIREDATE='2019-12-30'
+
+BACKUP DATABASE test1 TO NetSale_Bak_dev1
+WITH NAME='test1 完整式备份', DESCRIPTION='test1 完整式备份' ,EXPIREDATE='2019-12-30'
+
+RESTORE LOG test1 FROM NetSale_Bak_dev1 WITH FILE=3,NORECOVERY
+RESTORE LOG test1 FROM NetSale_Bak_dev1 WITH FILE=3,NORECOVERY
