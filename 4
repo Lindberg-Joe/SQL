@@ -1,0 +1,131 @@
+1
+create trigger lineitem_price_update on lineitem
+for update
+as
+declare @L_valuediff real;
+begin
+  select @L_valuediff = inserted.extendedprice*(1-inserted.discount)*(1+inserted.tax)-deleted.extendedprice*(1-deleted.discount)*(1+deleted.tax)
+  from inserted,deleted
+  where inserted.orderkey=deleted.orderkey
+update orders
+set totalprice=totalprice+@L_valuediff
+from orders,inserted,deleted
+where orders.orderkey=inserted.orderkey and inserted.orderkey=deleted.orderkey
+end;
+select totalprice
+from orders
+where orderkey=1854;
+update Lineitem 
+set tax=0.005
+where orderkey=1854 and linenumber=1;
+update Lineitem 
+set extendedprice=1000
+where orderkey=1854 and linenumber=1;
+update Lineitem 
+set discount=0.01
+where orderkey=1854 and linenumber=1;
+update Lineitem set tax=tax+0.005
+where orderkey=1854 and linenumber=1;
+
+
+2
+create trigger lineitem_price_insert on lineitem
+for insert
+as
+declare @L_valuediff real;
+begin
+  select @L_valuediff = inserted.extendedprice*(1-inserted.discount)*(1+inserted.tax)
+  from inserted
+update orders
+set totalprice=totalprice+@L_valuediff
+from orders,inserted
+where orders.orderkey=inserted.orderkey
+end;
+
+3
+create trigger lineitem_price_delete on lineitem
+for delete
+as
+declare @L_valuediff real;
+begin
+  select @L_valuediff = -deleted.extendedprice*(1-deleted.discount)*(1+deleted.tax)
+  from deleted
+update orders
+set totalprice=totalprice+@L_valuediff
+from orders,deleted
+where orders.orderkey=deleted.orderkey
+end;
+
+4
+create trigger tri_lineitem_quantity_update on lineitem
+instead of update
+as
+begin
+	declare @L_valuediff int;
+	declare	@L_availqty int;
+	select @L_valuediff=inserted.quantity-deleted.quantity
+	from inserted,deleted
+	where inserted.orderkey=deleted.orderkey;
+	select @L_availqty=availqty
+	from PartSupp,inserted 
+	where PartSupp.partkey=inserted.partkey and PartSupp.suppkey=inserted.suppkey;
+	if(@L_availqty-@L_valuediff>=0) 
+	begin
+		 print 'Available quantity is ENOUGH';
+		 update PartSupp
+		 set availqty=availqty-@L_valuediff
+		 from inserted
+		 where PartSupp.partkey=inserted.partkey and PartSupp.suppkey=inserted.suppkey;
+	end
+	else print 'Available quantity is NOT ENOUGH';
+end
+
+5
+create trigger tri_lineitem_quantity_update2 on lineitem
+instead of update
+as
+begin
+	declare @L_valuediff int;
+	declare	@L_availqty int;
+	select @L_valuediff=inserted.quantity
+	from inserted
+	select @L_availqty=availqty
+	from PartSupp,inserted 
+	where PartSupp.partkey=inserted.partkey and PartSupp.suppkey=inserted.suppkey;
+	if(@L_availqty-@L_valuediff>=0) 
+	begin
+		 print 'Available quantity is ENOUGH';
+		 update PartSupp
+		 set availqty=availqty-@L_valuediff
+		 from inserted
+		 where PartSupp.partkey=inserted.partkey and PartSupp.suppkey=inserted.suppkey;
+	end
+	else print 'Available quantity is NOT ENOUGH';
+end
+
+select L.partkey,L.suppkey,L.quantity,PS.availqty
+from Lineitem L,PartSupp PS
+where L.orderkey=1854 and L.partkey=PS.partkey and L.suppkey=PS.suppkey and L.linenumber=1; 
+
+update Lineitem
+set quantity=quantity+5
+where orderkey=1854 and linenumber=1;
+
+
+6
+create trigger tri_lineitem_quantity_delete on lineitem
+instead of delete
+as
+begin
+	declare @L_valuediff int;
+	declare	@L_availqty int;
+	select @L_valuediff=-deleted.quantity
+	from deleted;
+	update PartSupp
+	set availqty=availqty-@L_valuediff
+	from inserted
+	where PartSupp.partkey=inserted.partkey and PartSupp.suppkey=inserted.suppkey;
+end
+
+7
+drop trigger tri_lineitem_quantity_update;
